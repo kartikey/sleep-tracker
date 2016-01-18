@@ -9,7 +9,6 @@ By completing this challenge you will practice and master the following skills:
 * Using fragments to implement a multi-pane Activity
 * Dynamically changing displayed fragments
 * Managing a history of screens and tasks in an app
-<!-- * Supporting different device sizes and configurations (i.e., orientation) -->
 * Creating and displaying pop-up dialogs
 * Storing and retrieving data using SQLite
 
@@ -93,7 +92,7 @@ As explained in the [documentation](http://developer.android.com/training/basics
   - As mentioned in the documentation, it's a good idea to include a "primary key" (think an id that is unique for each row, making it easy to look them up). You make a primary key called `_id` that automatically counts up by declaring a row as `_id INTEGER PRIMARY KEY AUTOINCREMENT`. _You must include this `_id` field for your database to work easily with a ListView!_
 
   - SQLite doesn't support `DATE` or `TIME` as a separate type, so you'll have to store the datetime as either an `INTEGER` or `TEXT`. If you use `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` as the type, then the "time" will default to a text string describing the time (in UTC time, _not_ local time), even if you don't try to specifically insert a time! You can then use the [`Calendar`](http://developer.android.com/reference/java/util/Calendar.html) and [`DateUtils`](http://developer.android.com/reference/android/text/format/DateUtils.html) classes to convert this to local time.
-    - Date and times in Java kind of suck, but are good practice for working with objects and data!
+    - Dates and times in Java kind of suck, but are good practice for working with objects and data!
 
 - You can add new values to by using the `INSERT` SQL statement along with <a href="http://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.html#execSQL(java.lang.String)">`.execSQL()`</a>, but it's usually easier and cleaner to use the <a href="http://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.html#insert(java.lang.String, java.lang.String, android.content.ContentValues)">`.insert()`</a> method. This takes in a [`ContentValues`](http://developer.android.com/reference/android/content/ContentValues.html) object, which is basically a HashMap you can store values in
   - Remember that if you declared `DEFAULT` values for any of your columns (e.g., the primary key or the timestamp) you don't need to insert values into the table.
@@ -106,14 +105,14 @@ As explained in the [documentation](http://developer.android.com/training/basics
   - Your can sort the returned elements in descending order by specifying `ORDER BY fieldname DESCR` in your query. This is the (\*counts\*) **7th** parameter in the `.query()` method&mdash;just leave off the words `"ORDER BY`.
 
   - Either method you use will return a [`Cursor`](http://developer.android.com/reference/android/database/Cursor.html). This is a lot like an Iterator in Java; it keeps track of where you are in a list (e.g., what `i` we'd be on in a loop), and then provides methods that let us fetch values from the object at that spot in the list. You can then call methods to move around the list (e.g., to move to the next item). For example:
-  ```java
-  cursor.moveToFront(); //move to the first item
-  String field0 = cursor.getString(0); //get the first field (column you specified) as a String
-  String name = cursor.getString(cursor.getColumnIndexOrThrow("name")); //get the "name" field as a String
-  cursor.moveToNext(); //go to the next item
-  ```
+    ```java
+    cursor.moveToFront(); //move to the first item
+    String field0 = cursor.getString(0); //get the first field (column you specified) as a String
+    String name = cursor.getString(cursor.getColumnIndexOrThrow("name")); //get the "name" field as a String
+    cursor.moveToNext(); //go to the next item
+    ```
 
-- The nice think about `Cursors` though is that they can easily be fed into `AdapterViews` by using a [`CursorAdapter`](http://developer.android.com/reference/android/widget/CursorAdapter.html) (as opposed to the `ArrayAdapter` we've used previously). I recommend you use a [**`SimpleCursorAdapter`**](http://developer.android.com/reference/android/widget/SimpleCursorAdapter.html), as this abstracts out a lot of the detail and makes it almost as easy to use an an `ArrayAdapter`.
+- The nice thing about `Cursors` though is that they can easily be fed into `AdapterViews` by using a [`CursorAdapter`](http://developer.android.com/reference/android/widget/CursorAdapter.html) (as opposed to the `ArrayAdapter` we've used previously). I recommend you use a [**`SimpleCursorAdapter`**](http://developer.android.com/reference/android/widget/SimpleCursorAdapter.html), as this abstracts out a lot of the detail and makes it almost as easy to use an an `ArrayAdapter`.
 
   - You instantiate a new `SimpleCursorAdapter`, passing it a `Context`, a layout resource to inflate, a `Cursor`, an array of column names to fetch from each entry in the Cursor, and a matching list of view resource ids (which should all be `TextViews`) to assign each column to. Then you can set this adapter just like you did with `ArrayAdapter` in the last assignment.
 
