@@ -10,7 +10,7 @@
         android:id="@+id/detailTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="15sp"
         android:hint="Placeholder Title"/>
 
     <TextView
@@ -18,7 +18,7 @@
         android:id="@+id/detailCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="15sp"
         android:hint="Placeholder Count"/>
 
     <TextView
@@ -26,7 +26,7 @@
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="15sp"
         android:hint="Placeholder comment"/>
 
     <TextView
@@ -34,7 +34,7 @@
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="15sp"
         android:hint="Placeholder time"/>
 
 </LinearLayout>

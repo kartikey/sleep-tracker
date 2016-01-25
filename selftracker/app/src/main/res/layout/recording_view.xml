@@ -9,7 +9,7 @@
         android:id="@+id/recordHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Record Observation!"
+        android:text="Record Your Sleep!"
         android:textSize="30sp"
         />
 
@@ -18,7 +18,7 @@
         android:layout_below="@id/recordHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Enter an observation ..."
+        android:hint="Enter your sleep event!"
         android:layout_marginTop="20dp"/>
 
     <EditText
@@ -27,7 +27,7 @@
         android:inputType="number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Enter count of observation"
+        android:hint="How many hours did you sleep?"
         android:layout_marginTop="20dp"/>
 
     <EditText
@@ -35,7 +35,7 @@
         android:id="@+id/addComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Additional comments for observation"
+        android:hint="Additional comments for sleepzzzz"
         android:layout_marginTop="20dp"/>
 
     <Button

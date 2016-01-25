@@ -30,10 +30,10 @@ public class DetailFragment extends Fragment {
             TextView detailcomment = (TextView)rootView.findViewById(R.id.detailComment);
             TextView detailtime = (TextView)rootView.findViewById(R.id.detailTime);
 
-            detailtitle.setText(bundle.getString("title"));
-            detailcomment.setText(bundle.getString("comment"));
-            detailcount.setText(bundle.getString("count"));
-            detailtime.setText(bundle.getString("date"));
+            detailtitle.setText("Title:\n"+bundle.getString("title"));
+            detailcomment.setText("Comment:\n"+bundle.getString("comment"));
+            detailcount.setText("Duration:\n"+bundle.getString("count")+" Hours");
+            detailtime.setText("DateTime:\n"+bundle.getString("date"));
 
         }
 

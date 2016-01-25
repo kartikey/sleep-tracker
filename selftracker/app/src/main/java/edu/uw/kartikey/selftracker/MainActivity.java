@@ -25,6 +25,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements MainFragment.OnEventSelectedListener {
 
     private ArrayAdapter<String> adapter;
+    MainFragment mf = new MainFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +44,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnEv
         Log.v("Checking framelayout1", fl1.toString());
         Log.v("Checking framelayout2", fl2.toString());
 
-        FragmentManager manager = getFragmentManager();
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
 
-        FragmentTransaction ft = manager.beginTransaction();
+
         ft.add(R.id.containerLeft, new SummaryFragment());
         ft.add(R.id.containerRight, new MainFragment());
         ft.commit();
@@ -82,7 +84,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnEv
 
     public void onEventSelected(Observation o){
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+
 
         DetailFragment detail = new DetailFragment();
 
@@ -90,17 +95,18 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnEv
         bundle.putString("title",o.title);
         bundle.putString("count",o.count);
         bundle.putString("comment",o.comment);
-        bundle.putString("date",o.date);
+        bundle.putString("date", o.date);
 
         detail.setArguments(bundle);
 
-        if (findViewById(R.id.detailParent) != null) {
-            ft.replace(R.id.containerRight, detail);
-        } else {
+
+
             ft.replace(R.id.containerLeft, new MainFragment()).addToBackStack(null);
-            ft.replace(R.id.containerRight,detail);
-        }
+            ft.replace(R.id.containerRight, detail).addToBackStack(null);
+
+
 
         ft.commit();
+
     }
 }

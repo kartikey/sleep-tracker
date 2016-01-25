@@ -4,6 +4,8 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +19,10 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 
 /**
@@ -36,7 +40,6 @@ public class MainFragment extends Fragment {
 
     private ArrayAdapter<Observation> adapter;
     ArrayList<Observation> list = new ArrayList<Observation>();
-    ArrayList<Observation> secondlist = new ArrayList<Observation>();
 
     public MainFragment () {
 
@@ -49,6 +52,11 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView =  inflater.inflate(R.layout.mainlist_view, container, false);
 
+//        GetObservations go = new GetObservations();
+//        go.execute();
+
+
+
         Button button = (Button) rootView.findViewById(R.id.addItemButton);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +65,6 @@ public class MainFragment extends Fragment {
                 showDialog();
             }
         });
-
 
 
 
@@ -77,23 +84,23 @@ public class MainFragment extends Fragment {
 
                 Observation o = (Observation) parent.getItemAtPosition(position);
 
-                        ((OnEventSelectedListener) getActivity()).onEventSelected(o);
+                ((OnEventSelectedListener) getActivity()).onEventSelected(o);
             }
         });
 
-        Firebase.setAndroidContext(getActivity());
 
         Firebase ref = new Firebase("https://redclonefb.firebaseio.com/");
 
+        Query q = ref.orderByKey();  //ref.orderByChild("date");
 
 
-
-        ref.addChildEventListener(new ChildEventListener() {
+        adapter.clear();
+        q.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
 
-                Map<String,Object> m = (Map<String, Object>) dataSnapshot.getValue();
+                Map<String, Object> m = (Map<String, Object>) dataSnapshot.getValue();
                 Observation o = new Observation();
 
                 o.title = m.get("title").toString();
@@ -103,11 +110,15 @@ public class MainFragment extends Fragment {
 
                 Log.v("DEBUGGING", o.toString());
 
-                secondlist.add(o);
-
-                adapter.clear();
-                adapter.addAll(secondlist);
-
+                adapter.add(o);
+//                adapter.sort(new Comparator<Observation>() {
+//                    @Override
+//                    public int compare(Observation observation, Observation t1) {
+//                        if(observation.date.compareTo(t1.date) > 0) return -1;
+//                        else if(observation.date.compareTo(t1.date) < 0) return 1;
+//                        else return 0;
+//                    }
+//                });
 
             }
 
@@ -134,11 +145,6 @@ public class MainFragment extends Fragment {
 
 
 
-
-
-
-
-
         return rootView;
     }
 
@@ -155,5 +161,7 @@ public class MainFragment extends Fragment {
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.add(android.R.id.content, rf).addToBackStack(null).commit();
     }
+
+
 
 }

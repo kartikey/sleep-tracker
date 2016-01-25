@@ -66,8 +66,6 @@ public class RecordingFragment extends DialogFragment {
 
                 ref.push().setValue(post);
 
-
-
                 t.show();
 
                 getFragmentManager().popBackStack();

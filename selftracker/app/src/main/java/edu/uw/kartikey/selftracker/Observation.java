@@ -22,6 +22,7 @@ public class Observation {
     public Observation(){}
 
     public String toString(){
-        return this.title + " ("+this.count+")";
+        return this.title;
+        //+ " ("+this.count+")";
     }
 }
