@@ -11,9 +11,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 
-import java.util.ArrayList;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
-public class MainActivity extends AppCompatActivity {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity implements MainFragment.OnEventSelectedListener {
 
     private ArrayAdapter<String> adapter;
 
@@ -22,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Firebase.setAndroidContext(this);
+
+        Firebase ref = new Firebase("https://redclonefb.firebaseio.com/");
+
+        //ref.child("message").setValue("Checking");
 
         FrameLayout fl1 = (FrameLayout) findViewById(R.id.containerLeft);
         FrameLayout fl2 = (FrameLayout) findViewById(R.id.containerRight);
@@ -37,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
     }
 
@@ -65,5 +78,29 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
 
+    }
+
+    public void onEventSelected(Observation o){
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        DetailFragment detail = new DetailFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("title",o.title);
+        bundle.putString("count",o.count);
+        bundle.putString("comment",o.comment);
+        bundle.putString("date",o.date);
+
+        detail.setArguments(bundle);
+
+        if (findViewById(R.id.detailParent) != null) {
+            ft.replace(R.id.containerRight, detail);
+        } else {
+            ft.replace(R.id.containerLeft, new MainFragment()).addToBackStack(null);
+            ft.replace(R.id.containerRight,detail);
+        }
+
+        ft.commit();
     }
 }

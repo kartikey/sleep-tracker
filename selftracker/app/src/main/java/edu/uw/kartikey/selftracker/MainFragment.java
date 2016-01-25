@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +13,30 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by kartikey on 1/24/2016.
  */
 public class MainFragment extends Fragment {
 
+    private OnEventSelectedListener callback;
+
+    public interface OnEventSelectedListener {
+        public void onEventSelected(Observation o);
+    }
 
 
-    private ArrayAdapter<String> adapter;
+
+    private ArrayAdapter<Observation> adapter;
+    ArrayList<Observation> list = new ArrayList<Observation>();
+    ArrayList<Observation> secondlist = new ArrayList<Observation>();
 
     public MainFragment () {
 
@@ -43,14 +58,11 @@ public class MainFragment extends Fragment {
             }
         });
 
-        ArrayList<String> list = new ArrayList<String>();
 
-        list.add("1");
-        list.add("2");
-        list.add("3");
+
 
         //controller
-        adapter = new ArrayAdapter<String>(
+        adapter = new ArrayAdapter<Observation>(
                 getActivity(), R.layout.list_item, R.id.txtItem, list);
 
 
@@ -63,22 +75,68 @@ public class MainFragment extends Fragment {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Observation o = (Observation) parent.getItemAtPosition(position);
 
-                if(rootView.findViewById(R.id.detailParent) != null) {
-                    ft.replace(R.id.containerRight, new DetailFragment());
-                }
-                else {
-                    ft.replace(R.id.containerLeft, new MainFragment()).addToBackStack(null);
-                    ft.replace(R.id.containerRight, new DetailFragment()).addToBackStack(null);
-                }
+                        ((OnEventSelectedListener) getActivity()).onEventSelected(o);
+            }
+        });
 
-                ft.commit();
+        Firebase.setAndroidContext(getActivity());
 
+        Firebase ref = new Firebase("https://redclonefb.firebaseio.com/");
+
+
+
+
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+
+                Map<String,Object> m = (Map<String, Object>) dataSnapshot.getValue();
+                Observation o = new Observation();
+
+                o.title = m.get("title").toString();
+                o.count = m.get("count").toString();
+                o.comment = m.get("comment").toString();
+                o.date = m.get("date").toString();
+
+                Log.v("DEBUGGING", o.toString());
+
+                secondlist.add(o);
+
+                adapter.clear();
+                adapter.addAll(secondlist);
 
 
             }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
         });
+
+
+
+
+
+
 
 
         return rootView;
